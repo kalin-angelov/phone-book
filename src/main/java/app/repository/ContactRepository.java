@@ -1,6 +1,8 @@
 package app.repository;
 
 import app.model.Contact;
+import app.model.ContactActivity;
+import app.model.ContactType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,4 +19,8 @@ public interface ContactRepository extends JpaRepository<Contact, UUID> {
     List<Contact> findByFirstName(String request);
 
     List<Contact> findByLastName(String request);
+
+    List<Contact> findByType(ContactType type);
+
+    List<Contact> findByActivity(ContactActivity activity);
 }
