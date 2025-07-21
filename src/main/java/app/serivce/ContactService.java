@@ -38,14 +38,49 @@ public class ContactService {
         return contactRepository.findByPhoneNumber(phoneNumber).orElseThrow(() -> new NoExistingContact("Contact with phone number [%s] do not exist in contact list.".formatted(phoneNumber)));
     }
 
-    public List<Contact> getAllContactsBy(String request, SearchCriteria criteria) {
+    public List<Contact> getAllContactsBy(SearchCriteria criteria, String search) {
 
         List<Contact> contactList = new ArrayList<>();
 
         switch (criteria) {
-            case REGION -> contactList = contactRepository.findByRegion(request);
-            case FIRST_NAME -> contactList = contactRepository.findByFirstName(request);
-            case LAST_NAME -> contactList = contactRepository.findByLastName(request);
+            case REGION -> contactList = contactRepository.findByRegion(search);
+            case FIRST_NAME -> contactList = contactRepository.findByFirstName(search);
+            case LAST_NAME -> contactList = contactRepository.findByLastName(search);
+        }
+
+        if (contactList.isEmpty()) {
+            throw new NoExistingContact("No contact found.");
+        }
+
+        return contactList;
+    }
+
+    public List<Contact> getAllContactsByType(ContactType type) {
+
+        List<Contact> contactList = new ArrayList<>();
+
+        switch (type) {
+            case WORK -> contactList = contactRepository.findByType(ContactType.WORK);
+            case HOBBY -> contactList = contactRepository.findByType(ContactType.HOBBY);
+            case FAMILY -> contactList = contactRepository.findByType(ContactType.FAMILY);
+            case FRIEND -> contactList = contactRepository.findByType(ContactType.FRIEND);
+        }
+
+        if (contactList.isEmpty()) {
+            throw new NoExistingContact("No contact found.");
+        }
+
+        return contactList;
+    }
+
+
+    public List<Contact> getAllContactsByActivity(ContactActivity activity) {
+
+        List<Contact> contactList = new ArrayList<>();
+
+        switch (activity) {
+            case ACTIVE -> contactList = contactRepository.findByActivity(ContactActivity.ACTIVE);
+            case BLOCKED -> contactList = contactRepository.findByActivity(ContactActivity.BLOCKED);
         }
 
         if (contactList.isEmpty()) {
