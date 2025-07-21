@@ -6,6 +6,7 @@ import app.model.ContactActivity;
 import app.model.ContactType;
 import app.model.SearchCriteria;
 import app.repository.ContactRepository;
+import app.web.dto.ContactEditRequest;
 import app.web.dto.ContactRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,9 +43,9 @@ public class ContactService {
         List<Contact> contactList = new ArrayList<>();
 
         switch (criteria) {
-            case REGION -> contactList = contactRepository.findAllByIdRegion(request);
-            case FIRST_NAME -> contactList = contactRepository.findAllByFirstName(request);
-            case LAST_NAME -> contactList = contactRepository.findAllByLastName(request);
+            case REGION -> contactList = contactRepository.findByRegion(request);
+            case FIRST_NAME -> contactList = contactRepository.findByFirstName(request);
+            case LAST_NAME -> contactList = contactRepository.findByLastName(request);
         }
 
         if (contactList.isEmpty()) {
@@ -54,28 +55,28 @@ public class ContactService {
         return contactList;
     }
 
-    public Contact editContact(UUID id, ContactRequest contactRequest) {
+    public Contact editContact(UUID id, ContactEditRequest contactEditRequest) {
 
         Contact contact = contactRepository.findById(id).orElseThrow(() -> new NoExistingContact("Contact not found in database"));
 
-        if (!contactRequest.getFirstName().isEmpty()) {
-            contact.setFirstName(contactRequest.getFirstName());
+        if (contactEditRequest.getFirstName() != null) {
+            contact.setFirstName(contactEditRequest.getFirstName());
         }
 
-        if (!contactRequest.getLastName().isEmpty()) {
-            contact.setLastName(contactRequest.getLastName());
+        if (contactEditRequest.getLastName() != null) {
+            contact.setLastName(contactEditRequest.getLastName());
         }
 
-        if (!contactRequest.getPhoneNumber().isEmpty()) {
-            contact.setPhoneNumber(contactRequest.getPhoneNumber());
+        if (contactEditRequest.getPhoneNumber() != null) {
+            contact.setPhoneNumber(contactEditRequest.getPhoneNumber());
         }
 
-        if (!contactRequest.getRegion().isEmpty()) {
-            contact.setRegion(contactRequest.getRegion());
+        if (contactEditRequest.getRegion() != null) {
+            contact.setRegion(contactEditRequest.getRegion());
         }
 
-        if (!contactRequest.getAvatar().isEmpty()) {
-            contact.setAvatar(contactRequest.getAvatar());
+        if (contactEditRequest.getAvatar() != null) {
+            contact.setAvatar(contactEditRequest.getAvatar());
         }
 
         contact.setUpdatedOn(LocalDateTime.now());
@@ -98,8 +99,13 @@ public class ContactService {
         contactRepository.save(contact);
     }
 
+    public void deleteContact(UUID id) {
+
+        contactRepository.deleteById(id);
+    }
+
     public void changeContactActivity(UUID id) {
-        
+
         Contact contact = contactRepository.findById(id).orElseThrow(() -> new NoExistingContact("Contact not found in database"));
 
         if (contact.getActivity().equals(ContactActivity.ACTIVE)) {
