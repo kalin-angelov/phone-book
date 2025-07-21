@@ -12,9 +12,9 @@ import java.util.UUID;
 public interface ContactRepository extends JpaRepository<Contact, UUID> {
     Optional<Contact> findByPhoneNumber(String phoneNumber);
 
-    List<Contact> findAllByIdRegion(String request);
+    List<Contact> findByRegion(String request);
 
-    List<Contact> findAllByFirstName(String request);
+    List<Contact> findByFirstName(String request);
 
-    List<Contact> findAllByLastName(String request);
+    List<Contact> findByLastName(String request);
 }
