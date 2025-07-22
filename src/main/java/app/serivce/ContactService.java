@@ -8,6 +8,7 @@ import app.model.SearchCriteria;
 import app.repository.ContactRepository;
 import app.web.dto.ContactEditRequest;
 import app.web.dto.ContactRequest;
+import app.web.dto.SearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,8 +35,8 @@ public class ContactService {
         return contactRepository.findAll();
     }
 
-    public Contact getContactByPhoneNumber(String phoneNumber) {
-        return contactRepository.findByPhoneNumber(phoneNumber).orElseThrow(() -> new NoExistingContact("Contact with phone number [%s] do not exist in contact list.".formatted(phoneNumber)));
+    public Contact getContactByPhoneNumber(SearchRequest request) {
+        return contactRepository.findByPhoneNumber(request.getSearch()).orElseThrow(NoExistingContact::new);
     }
 
     public List<Contact> getAllContactsBy(SearchCriteria criteria, String search) {
@@ -49,7 +50,7 @@ public class ContactService {
         }
 
         if (contactList.isEmpty()) {
-            throw new NoExistingContact("No contact found.");
+            throw new NoExistingContact();
         }
 
         return contactList;
@@ -67,7 +68,7 @@ public class ContactService {
         }
 
         if (contactList.isEmpty()) {
-            throw new NoExistingContact("No contact found.");
+            throw new NoExistingContact();
         }
 
         return contactList;
@@ -84,7 +85,7 @@ public class ContactService {
         }
 
         if (contactList.isEmpty()) {
-            throw new NoExistingContact("No contact found.");
+            throw new NoExistingContact();
         }
 
         return contactList;
@@ -92,7 +93,7 @@ public class ContactService {
 
     public Contact editContact(UUID id, ContactEditRequest contactEditRequest) {
 
-        Contact contact = contactRepository.findById(id).orElseThrow(() -> new NoExistingContact("Contact not found in database"));
+        Contact contact = contactRepository.findById(id).orElseThrow(NoExistingContact::new);
 
         if (contactEditRequest.getFirstName() != null) {
             contact.setFirstName(contactEditRequest.getFirstName());
@@ -121,7 +122,7 @@ public class ContactService {
 
     public void changeContactType(UUID id, ContactType type) {
 
-        Contact contact = contactRepository.findById(id).orElseThrow(() -> new NoExistingContact("Contact not found in database"));
+        Contact contact = contactRepository.findById(id).orElseThrow(NoExistingContact::new);
 
         switch (type) {
             case WORK -> contact.setType(ContactType.WORK);
@@ -141,7 +142,7 @@ public class ContactService {
 
     public void changeContactActivity(UUID id) {
 
-        Contact contact = contactRepository.findById(id).orElseThrow(() -> new NoExistingContact("Contact not found in database"));
+        Contact contact = contactRepository.findById(id).orElseThrow(NoExistingContact::new);
 
         if (contact.getActivity().equals(ContactActivity.ACTIVE)) {
             contact.setActivity(ContactActivity.BLOCKED);
