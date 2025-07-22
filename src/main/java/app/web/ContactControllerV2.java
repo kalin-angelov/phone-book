@@ -5,10 +5,7 @@ import app.model.ContactActivity;
 import app.model.ContactType;
 import app.model.SearchCriteria;
 import app.serivce.ContactService;
-import app.web.dto.ContactEditRequest;
-import app.web.dto.ContactRequest;
-import app.web.dto.ContactResponse;
-import app.web.dto.SearchResponse;
+import app.web.dto.*;
 import app.web.mapper.DtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,7 +32,18 @@ public class ContactControllerV2 {
                 .body(contactList);
     }
 
-    @GetMapping("/{type}")
+    @GetMapping("/search")
+    public ResponseEntity<ContactResponse> getContactByNumber(@RequestBody SearchRequest request) {
+
+        Contact contact = contactService.getContactByPhoneNumber(request);
+        ContactResponse response = DtoMapper.toContactResponse(contact, HttpStatus.OK, "Search result.");
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
+
+    @GetMapping("/filter-type/{type}")
     public ResponseEntity<SearchResponse> getContactByContactType(@PathVariable ContactType type) {
 
         List<Contact> result = contactService.getAllContactsByType(type);
@@ -48,7 +56,7 @@ public class ContactControllerV2 {
                         .build());
     }
 
-    @GetMapping("/{activity}")
+    @GetMapping("/filter-activity/{activity}")
     public ResponseEntity<SearchResponse> getContactByContactActivity(@PathVariable ContactActivity activity) {
 
         List<Contact> result = contactService.getAllContactsByActivity(activity);
@@ -62,7 +70,7 @@ public class ContactControllerV2 {
     }
 
 
-    @GetMapping("/{criteria}/{search}")
+    @GetMapping("/filter/{criteria}/{search}")
     public ResponseEntity<SearchResponse> getContactByCriteriaAndSearch(@PathVariable SearchCriteria criteria, @PathVariable String search) {
 
         List<Contact> result = contactService.getAllContactsBy(criteria, search);
@@ -106,4 +114,25 @@ public class ContactControllerV2 {
                 .status(HttpStatus.OK)
                 .body("Contact successfully removed.");
     }
+
+    @PutMapping("/{id}/switch")
+    public ResponseEntity<String> switchContactActivity(@PathVariable UUID id) {
+
+        contactService.changeContactActivity(id);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("Contact activity is successfully chang.");
+    }
+
+    @PutMapping("/{id}/{type}")
+    public ResponseEntity<String> changeContactType(@PathVariable UUID id, @PathVariable ContactType type) {
+
+        contactService.changeContactType(id, type);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("Contact type successfully change.");
+    }
+
 }
