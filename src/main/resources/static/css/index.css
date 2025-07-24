@@ -1,0 +1,42 @@
+@import url("https://use.fontawesome.com/releases/v6.4.0/css/all.css");
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.button {
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 1px solid white;
+    border-radius: 5px;
+    padding: 5px;
+    color: white;
+}
+
+body {
+    max-width: 100%;
+    font-family: "Oswald", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+
+    background: whitesmoke;
+}
+
+main {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}

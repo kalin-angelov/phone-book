@@ -1,0 +1,47 @@
+.form {
+    width: 245px;
+    height: 470px;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid black;
+    border-radius: 12px;
+    background-color: black;
+    box-shadow: 5px 5px 10px rgb(0, 0, 0);
+    align-self: center;
+
+    h3 {
+        color: rgb(212, 211, 211);
+        padding: 4px;
+    }
+
+    fieldset {
+        background-color: white;
+        border: none;
+        padding: 5px;
+        height: 75px;
+        display: flex;
+        flex-direction: column;
+
+        label {
+            padding: 5px 0px;
+            align-self: self-start;
+        }
+
+        .formInput {
+            input {
+                width: 100%;
+                border: none;
+                border-bottom: 1px solid black;
+                padding: 2px;
+                outline: none;
+            }
+        }
+    }
+
+    .form-btn {
+        margin-top: 10px;
+        border-radius: 50px;
+        font-weight: bold;
+        color: black;
+    }
+}
