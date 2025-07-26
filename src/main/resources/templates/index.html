@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/index.css">
+    <link rel="stylesheet" type="text/css" href="/css/home.css">
+    <title>Contacts</title>
+</head>
+<body>
+<main>
+    <h2>Contact list</h2>
+
+    <div class="container" th:each="contact: ${contacts}">
+        <article class="contact">
+            <img th:src="${#strings.isEmpty(contact.avatar) ? 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' : contact.avatar}" alt="contact avatar">
+            <h3 th:text="${contact.lastName == null ? contact.firstName : contact.firstName + ' ' + contact.lastName}">Name</h3>
+            <p th:text="${contact.phoneNumber}"></p>
+            <p th:text="${#strings.isEmpty(contact.region) ? 'UNKNOWN' : contact.region}"></p>
+            <P th:text="${contact.type}"></P>
+            <p th:text="${contact.activity}" th:classappend="${contact.activity.name() == 'ACTIVE' ? 'active' : 'inactive'}"></p></p>
+
+            <div class="button-section">
+                <a th:href="@{'/edit/' + ${contact.id}}" class="button edit" title="Edit contact"><i class="fa-solid fa-pen-to-square"></i></a>
+
+                <form th:action="@{'/remove/' + ${contact.id}}" th:method="DELETE" >
+                    <button class="button delete" title="Remove contact"><i class="fa-solid fa-trash"></i></i></button>
+                </form>
+
+                <form th:action="@{'/switch/' + ${contact.id}}" th:method="PUT">
+                    <button class="button block" title="Block contact"><i class="fa-solid fa-phone-slash"></i></i></button>
+                </form>
+
+            </div>
+        </article>
+    </div>
+</main>
+</body>
+</html>
