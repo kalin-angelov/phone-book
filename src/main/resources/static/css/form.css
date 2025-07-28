@@ -42,6 +42,61 @@
         margin-top: 10px;
         border-radius: 50px;
         font-weight: bold;
-        color: black;
+    }
+}
+
+.edit-contact-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+
+    input {
+        border: none;
+        outline: none;
+        background-color: transparent;
+
+        font-size: 18px;
+        font-family: "Oswald", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 300;
+        font-style: normal;
+    }
+
+    select {
+        border: none;
+        background-color: transparent;
+        outline: none;
+
+        font-size: 18px;
+        font-family: "Oswald", sans-serif;
+        font-optical-sizing: auto;
+        font-weight: 300;
+        font-style: normal;
+        width: 120px;
+
+        option {
+            text-align: center;
+        }
+    }
+
+    .edit-section {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding-right: 36px;
+    }
+
+    .save-section {
+        text-align: center;
+        width: 100%;
+
+        .save {
+            padding: 15px;
+            background: #11cd8e;
+        }
     }
 }
