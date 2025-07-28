@@ -12,49 +12,32 @@
 </head>
 <body>
 <main>
-    <form class="form" th:action="@{/edit}" th:method="PUT" th:object="${contactRequest}">
 
-        <h3>Edit Contact</h3>
+    <h2>Edit Contact</h2>
 
-        <fieldset>
-            <label for="firstName">First name</label>
-            <div class="formInput">
-                <input type="text" placeholder="First name" id="firstName" th:field="*{firstName}"/>
-            </div>
-        </fieldset>
-
-        <fieldset>
-            <label for="lastName">Last name</label>
-            <div class="formInput">
-                <input type="text" placeholder="Last name" id="lastName" th:field="*{lastName}"/>
-            </div>
-        </fieldset>
-
-        <fieldset>
-            <label for="phoneNumber">Number</label>
-            <div class="formInput">
-                <input type="text" placeholder="XXXX XXX XXX" id="phoneNumber" th:field="*{phoneNumber}"/>
-            </div>
-        </fieldset>
-
-        <fieldset>
-            <label for="avatar">Avatar</label>
-            <div class="formInput">
+    <div class="contact">
+        <form class="edit-contact-form" th:action="@{/edit}" th:method="PUT" th:object="${contactRequest}">
+            <div class="edit-section">
+                <img th:src="${#strings.isEmpty(contact.avatar) ? 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' : contact.avatar}" alt="contact avatar">
                 <input type="text" placeholder="Img Url" id="avatar" th:field="*{avatar}"/>
             </div>
-        </fieldset>
-
-        <fieldset>
-            <label for="region">Region</label>
-            <div class="formInput">
-                <input type="text" placeholder="City" id="region" th:field="*{region}" required/>
+            <div class="edit-section">
+                <input type="text" placeholder="First name" id="firstName" th:field="*{firstName}"/>
+                <input type="text" placeholder="Last name" id="lastName" th:field="*{lastName}"/>
             </div>
-        </fieldset>
+            <input type="text" placeholder="XXXX XXX XXX" id="phoneNumber" th:field="*{phoneNumber}"/>
+            <input type="text" placeholder="City" id="region" th:field="*{region}"/>
+            <select name="type" id="type" th:field="*{type}">
+                <option th:each="type : ${T(app.model.ContactType.values()}" th:value="${type}" th:text="${#strings.capitalize(#strings.toLowerCase(type))}"></option>
+            </select>
 
+            <div class="save-section">
+                <button type="submit" class="button save"><i class="fa-solid fa-floppy-disk"></i></button>
+            </div>
 
-        <button type="submit" class="button form-btn">Save</button>
+        </form>
 
-    </form>
+    </div>
 
 </main>
 </body>
