@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/css/index.css">
     <link rel="stylesheet" type="text/css" href="/css/form.css">
+    <link rel="stylesheet" type="text/css" href="/css/home.css">
     <title>Edit contact</title>
 </head>
 <body>
@@ -16,9 +17,9 @@
     <h2>Edit Contact</h2>
 
     <div class="contact">
-        <form class="edit-contact-form" th:action="@{/edit}" th:method="PUT" th:object="${contactRequest}">
+        <form class="edit-contact-form" th:action="@{'/edit/' + ${contact.id}}" th:method="PUT" th:object="${editRequest}">
             <div class="edit-section">
-                <img th:src="${#strings.isEmpty(contact.avatar) ? 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' : contact.avatar}" alt="contact avatar">
+                <img class="image" th:src="${#strings.isEmpty(editRequest.avatar) ? 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' : editRequest.avatar}" alt="contact avatar">
                 <input type="text" placeholder="Img Url" id="avatar" th:field="*{avatar}"/>
             </div>
             <div class="edit-section">
@@ -28,7 +29,7 @@
             <input type="text" placeholder="XXXX XXX XXX" id="phoneNumber" th:field="*{phoneNumber}"/>
             <input type="text" placeholder="City" id="region" th:field="*{region}"/>
             <select name="type" id="type" th:field="*{type}">
-                <option th:each="type : ${T(app.model.ContactType.values()}" th:value="${type}" th:text="${#strings.capitalize(#strings.toLowerCase(type))}"></option>
+                <option th:each="type : ${T(app.model.ContactType).values()}" th:value="${type}" th:text="${#strings.capitalize(#strings.toLowerCase(type))}"></option>
             </select>
 
             <div class="save-section">
