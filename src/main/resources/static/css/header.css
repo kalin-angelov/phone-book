@@ -89,6 +89,7 @@ header {
                     color: black;
                     background: white;
                     border-radius: 0px;
+                    height: inherit;
                 }
             }
         }
