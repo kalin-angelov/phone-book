@@ -31,6 +31,9 @@ public class ContactService {
         return contact;
     }
 
+    public Contact getContact(UUID id) {
+        return contactRepository.findById(id).orElseThrow(NoExistingContact::new);
+    }
     public List<Contact> getAllContacts () {
         return contactRepository.findAll();
     }
@@ -95,24 +98,28 @@ public class ContactService {
 
         Contact contact = contactRepository.findById(id).orElseThrow(NoExistingContact::new);
 
-        if (contactEditRequest.getFirstName() != null) {
+        if (!contactEditRequest.getFirstName().equals(contact.getFirstName())) {
             contact.setFirstName(contactEditRequest.getFirstName());
         }
 
-        if (contactEditRequest.getLastName() != null) {
+        if (!contactEditRequest.getLastName().equals(contact.getLastName())) {
             contact.setLastName(contactEditRequest.getLastName());
         }
 
-        if (contactEditRequest.getPhoneNumber() != null) {
+        if (!contactEditRequest.getPhoneNumber().equals(contact.getPhoneNumber())) {
             contact.setPhoneNumber(contactEditRequest.getPhoneNumber());
         }
 
-        if (contactEditRequest.getRegion() != null) {
+        if (!contactEditRequest.getRegion().equals(contact.getRegion())) {
             contact.setRegion(contactEditRequest.getRegion());
         }
 
-        if (contactEditRequest.getAvatar() != null) {
+        if (!contactEditRequest.getAvatar().equals(contact.getAvatar())) {
             contact.setAvatar(contactEditRequest.getAvatar());
+        }
+
+        if (!contactEditRequest.getType().equals(contact.getType())) {
+            contact.setType(contactEditRequest.getType());
         }
 
         contact.setUpdatedOn(LocalDateTime.now());
