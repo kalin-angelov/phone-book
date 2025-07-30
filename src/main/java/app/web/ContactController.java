@@ -2,6 +2,7 @@ package app.web;
 
 import app.model.Contact;
 import app.serivce.ContactService;
+import app.web.dto.ContactEditRequest;
 import app.web.dto.ContactRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,11 +61,33 @@ public class ContactController {
     public ModelAndView getEditContactView(@PathVariable UUID id) {
 
         ModelAndView modelAndView = new ModelAndView();
+        Contact contact = contactService.getContact(id);
+        ContactEditRequest editRequest = ContactEditRequest.builder()
+                .firstName(contact.getFirstName())
+                .lastName(contact.getLastName())
+                .phoneNumber(contact.getPhoneNumber())
+                .avatar(contact.getAvatar())
+                .region(contact.getRegion())
+                .region(contact.getRegion())
+                .type(contact.getType())
+                .build();
 
         modelAndView.setViewName("edit-contact");
-        modelAndView.addObject("contactRequest", new ContactRequest());
+        modelAndView.addObject("contact", contact);
+        modelAndView.addObject("editRequest", editRequest);
 
         return modelAndView;
+    }
+
+    @PutMapping("/edit/{id}")
+    public ModelAndView editContact(@PathVariable UUID id, @Valid ContactEditRequest editRequest, BindingResult result) {
+
+        if(result.hasErrors()) {
+            return new ModelAndView("redirect:/edit/" + id);
+        }
+
+        contactService.editContact(id, editRequest);
+        return new ModelAndView("redirect:/");
     }
 
     @DeleteMapping("/remove/{id}")
