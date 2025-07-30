@@ -1,0 +1,96 @@
+header {
+
+    background-color: #489dd2b3;
+
+    nav {
+        width: 100%;
+        padding: 10px;
+
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        p {
+            font-size: 22px;
+        }
+
+        .search-section-type {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+
+            label {
+                font-size: 22px;
+            }
+
+            select {
+                width: 150px;
+                height: 25px;
+                font-size: 18px;
+                outline: none;
+                cursor: pointer;
+                border: none;
+            }
+        }
+
+        .search-section-activity {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+
+            label {
+                font-size: 22px;
+            }
+
+            .button-select {
+                width: 186px;
+                height: 25px;
+                font-size: 18px;
+
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+        }
+
+        .search-section-region {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+
+            label {
+                font-size: 22px;
+            }
+
+            form {
+                width: 206px;
+                height: 25px;
+                font-size: 18px;
+
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                input {
+                    width: 180px;
+                    height: 25px;
+                    font-size: 18px;
+                    outline: none;
+                    cursor: pointer;
+                    border: none;
+                }
+
+                button {
+                    color: black;
+                    background: white;
+                    border-radius: 0px;
+                }
+            }
+        }
+    }
+}
