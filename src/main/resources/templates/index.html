@@ -16,7 +16,7 @@
 
     <div class="container" th:each="contact: ${contacts}">
         <article class="contact">
-            <img th:src="${#strings.isEmpty(contact.avatar) ? 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' : contact.avatar}" alt="contact avatar">
+            <img class="image" th:src="${#strings.isEmpty(contact.avatar) ? 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png' : contact.avatar}" alt="contact avatar">
             <h3 th:text="${contact.lastName == null ? contact.firstName : contact.firstName + ' ' + contact.lastName}">Name</h3>
             <p th:text="${contact.phoneNumber}"></p>
             <p th:text="${#strings.isEmpty(contact.region) ? 'UNKNOWN' : contact.region}"></p>
