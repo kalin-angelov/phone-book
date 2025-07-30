@@ -8,9 +8,47 @@
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/css/index.css">
     <link rel="stylesheet" type="text/css" href="/css/home.css">
+    <link rel="stylesheet" type="text/css" href="/css/header.css">
     <title>Contacts</title>
 </head>
 <body>
+<header>
+    <nav>
+
+        <div class="search-section-region">
+            <p>Region</p>
+            <form>
+                <input type="search" placeholder="Type region here">
+                <button type="submit" class="button"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+        </div>
+
+        <div class="search-section-activity">
+            <p>Activity</p>
+            <div class="button-select">
+                <div>
+                    <input type="radio" id="active" name="activity" checked>
+                    <label for="active">Active</label>
+                </div>
+                <div>
+                    <input type="radio" id="bloced" name="activity">
+                    <label for="bloced">Blocked</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="search-section-type">
+            <label for="type">Type</label>
+            <select name="type" id="type">
+                <option value="type">Friend</option>
+                <option value="type">Family</option>
+                <option value="type">Work</option>
+                <option value="types">Hobby</option>
+            </select>
+        </div>
+
+    </nav>
+</header>
 <main>
     <h2>Contact list</h2>
 
