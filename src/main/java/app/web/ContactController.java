@@ -1,107 +1,138 @@
 package app.web;
 
 import app.model.Contact;
+import app.model.ContactActivity;
+import app.model.ContactType;
+import app.model.SearchCriteria;
 import app.serivce.ContactService;
-import app.web.dto.ContactEditRequest;
-import app.web.dto.ContactRequest;
-import jakarta.validation.Valid;
+import app.web.dto.*;
+import app.web.mapper.DtoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 import java.util.UUID;
 
-@Controller
+@RestController
+@RequestMapping("/api/v2/contacts")
 public class ContactController {
 
     @Autowired
     private ContactService contactService;
 
-    @GetMapping("/")
-    public ModelAndView getHomeView() {
+    @GetMapping
+    public ResponseEntity<List<Contact>> getAllContacts() {
 
-        ModelAndView modelAndView = new ModelAndView();
+        List<Contact> contactList = contactService.getAllContacts();
 
-        List<Contact> contacts = contactService.getAllContacts();
-
-        modelAndView.setViewName("index");
-        modelAndView.addObject("contacts", contacts);
-        return modelAndView;
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(contactList);
     }
 
-    @GetMapping("/new")
-    public ModelAndView getCreateView() {
+    @GetMapping("/search")
+    public ResponseEntity<ContactResponse> getContactByNumber(@RequestBody SearchRequest request) {
 
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("create-contact");
-        modelAndView.addObject("contactRequest", new ContactRequest());
+        Contact contact = contactService.getContactByPhoneNumber(request);
+        ContactResponse response = DtoMapper.toContactResponse(contact, HttpStatus.OK, "Search result.");
 
-        return modelAndView;
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
+    }
+
+    @GetMapping("/filter-type/{type}")
+    public ResponseEntity<SearchResponse> getContactByContactType(@PathVariable ContactType type) {
+
+        List<Contact> result = contactService.getAllContactsByType(type);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SearchResponse.builder()
+                        .status(HttpStatus.OK.value())
+                        .result(result)
+                        .build());
+    }
+
+    @GetMapping("/filter-activity/{activity}")
+    public ResponseEntity<SearchResponse> getContactByContactActivity(@PathVariable ContactActivity activity) {
+
+        List<Contact> result = contactService.getAllContactsByActivity(activity);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SearchResponse.builder()
+                        .status(HttpStatus.OK.value())
+                        .result(result)
+                        .build());
+    }
+
+
+    @GetMapping("/filter/{criteria}/{search}")
+    public ResponseEntity<SearchResponse> getContactByCriteriaAndSearch(@PathVariable SearchCriteria criteria, @PathVariable String search) {
+
+        List<Contact> result = contactService.getAllContactsBy(criteria, search);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SearchResponse.builder()
+                        .status(HttpStatus.OK.value())
+                        .result(result)
+                        .build());
     }
 
     @PostMapping("/new")
-    public ModelAndView addNewContact(@Valid ContactRequest contactRequest, BindingResult bindingResult) {
+    public ResponseEntity<ContactResponse> createNewContact(@RequestBody ContactRequest contactRequest) {
 
-        ModelAndView modelAndView = new ModelAndView();
+        Contact newContact = contactService.addNewContact(contactRequest);
+        ContactResponse response = DtoMapper.toContactResponse(newContact, HttpStatus.CREATED, "New contact successfully created.");
 
-        if (bindingResult.hasErrors()) {
-            return new ModelAndView("create-contact");
-        }
-
-        modelAndView.addObject(contactRequest);
-        contactService.addNewContact(contactRequest);
-
-        return new ModelAndView("redirect:/");
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
     }
 
-    @GetMapping("/edit/{id}")
-    public ModelAndView getEditContactView(@PathVariable UUID id) {
+    @PutMapping("/{id}/update")
+    public ResponseEntity<ContactResponse> updateContact(@PathVariable UUID id, @RequestBody ContactEditRequest contactEditRequest) {
 
-        ModelAndView modelAndView = new ModelAndView();
-        Contact contact = contactService.getContact(id);
-        ContactEditRequest editRequest = ContactEditRequest.builder()
-                .firstName(contact.getFirstName())
-                .lastName(contact.getLastName())
-                .phoneNumber(contact.getPhoneNumber())
-                .avatar(contact.getAvatar())
-                .region(contact.getRegion())
-                .region(contact.getRegion())
-                .type(contact.getType())
-                .build();
+        Contact contact = contactService.editContact(id, contactEditRequest);
+        ContactResponse response = DtoMapper.toContactResponse(contact, HttpStatus.OK, "Contact successfully edited.");
 
-        modelAndView.setViewName("edit-contact");
-        modelAndView.addObject("contact", contact);
-        modelAndView.addObject("editRequest", editRequest);
-
-        return modelAndView;
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(response);
     }
 
-    @PutMapping("/edit/{id}")
-    public ModelAndView editContact(@PathVariable UUID id, @Valid ContactEditRequest editRequest, BindingResult result) {
-
-        if(result.hasErrors()) {
-            return new ModelAndView("redirect:/edit/" + id);
-        }
-
-        contactService.editContact(id, editRequest);
-        return new ModelAndView("redirect:/");
-    }
-
-    @DeleteMapping("/remove/{id}")
-    public ModelAndView removeContact(@PathVariable UUID id) {
+    @DeleteMapping("/{id}/remove")
+    public ResponseEntity<String> removeContact(@PathVariable UUID id) {
 
         contactService.deleteContact(id);
-        return new ModelAndView("redirect:/");
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("Contact successfully removed.");
     }
 
-    @PutMapping("/switch/{id}")
-    public ModelAndView switchContactActivity(@PathVariable UUID id) {
+    @PutMapping("/{id}/switch")
+    public ResponseEntity<String> switchContactActivity(@PathVariable UUID id) {
 
         contactService.changeContactActivity(id);
-        return new ModelAndView("redirect:/");
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("Contact activity is successfully chang.");
+    }
+
+    @PutMapping("/{id}/{type}")
+    public ResponseEntity<String> changeContactType(@PathVariable UUID id, @PathVariable ContactType type) {
+
+        contactService.changeContactType(id, type);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("Contact type successfully change.");
     }
 
 }
